@@ -13,42 +13,42 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
-import { get_cart } from "../redux/cart/actions";
+import { add_to_cart, get_cart } from "../redux/cart/actions";
 import { get_single_product } from "../redux/products/actions";
 import { BoxStyle, ButtonStyle } from "../styles/global";
 
 export default function SingleProduct() {
   const dispatch = useDispatch();
-  const Router = useParams();
-  const params = Router.query;
+  const { id } = useParams();
 
   const { PRODUCTS } = useSelector((store) => store.productsManager);
 
   const ITEM = PRODUCTS[0];
 
   useEffect(() => {
-    if (Router.isReady) {
-      dispatch(get_single_product(params));
+    if (id) {
+      dispatch(get_single_product({ id }));
     } else {
       return;
     }
-  }, [params]);
+  }, [id]);
 
   const handleAdd = (id) => {
     console.log(id);
-    // dispatch(
-    //   add_to_cart({
-    //     userId: id,
-    //     quantity: 1,
-    //   })
-    // );
+    dispatch(
+      add_to_cart({
+        quantity: 1,
+      })
+    );
   };
 
   useEffect(() => {
     dispatch(get_cart());
   }, []);
+
+  // console.log(ITEM);
 
   return (
     PRODUCTS.length && (

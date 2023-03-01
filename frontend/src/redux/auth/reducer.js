@@ -1,11 +1,8 @@
 import { USER_LOGIN, USER_REGISTER } from "./actionTypes";
 
-let token = null;
-let user = null;
-if (typeof window !== "undefined") {
-  token = localStorage.getItem("token") || null;
-  user = JSON.parse(localStorage.getItem("user")) || null;
-}
+let token = localStorage.getItem("token") || null;
+let user = JSON.parse(localStorage.getItem("user")) || null;
+
 const initialState = {
   token,
   isAuth: !!token,

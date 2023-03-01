@@ -21,32 +21,24 @@ import {
   HStack,
   Divider,
 } from "@chakra-ui/react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function FilterComponent() {
-  const dispatch = useDispatch();
-  const { PRODUCTS } = useSelector((store) => store.productsManager);
-  const Router = useParams();
-  const params = Router.query;
-
+  let navigate = useNavigate();
   const handleFilter = (main, sub) => {
     if (main === "price") {
-      Router.query.min = sub[0];
-      Router.query.max = sub[2];
-      Router.push(Router);
+      navigate(`?min=${sub[0]}&max${sub[2]}`);
     } else if (main === "brand") {
-      Router.query.brand = sub;
-      Router.push(Router);
+      navigate(`?${main}=${sub}`);
     } else if (main === "sort") {
-      Router.query.sort = sub[2];
-      Router.push(Router);
+      navigate(`?${main}=${sub[2]}`);
     }
   };
 
   return (
-    <Box>
+    <Box position={"sticky"} top="65px">
       <Stack p="10px" textAlign="left">
         <Stack p="15px" position={"relative"}>
           <HStack w="100%" justify={"space-between"}>
@@ -69,6 +61,7 @@ export default function FilterComponent() {
                     <button onClick={() => handleFilter(main.title, el)}>
                       {el}
                     </button>
+                    {/* <Link to={`?${main.title}=${el}`}> {el}</Link> */}
                     <br />
                   </div>
                 ))}
@@ -124,6 +117,10 @@ export function FilterDrower() {
 }
 
 export const filters = [
+  {
+    title: "category",
+    subtitles: ["blush", "bronzer", "eyeliner", "lipstick", "nail_polish"],
+  },
   {
     title: "sort",
     subtitles: [

@@ -9,6 +9,7 @@ import {
   GET_CART_SUCCESS,
   UPDATE_CART,
 } from "./actionTypes";
+
 const token = localStorage.getItem("token");
 
 export const get_cart = () => async (dispatch) => {
@@ -16,11 +17,10 @@ export const get_cart = () => async (dispatch) => {
   try {
     let res = await axios.get(`${baseURL}/cart`, {
       headers: {
-        Authorization:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ZmM2NmMmE0YzMyNWMxZDJhYTUyMjMiLCJpYXQiOjE2Nzc2ODM3NDV9.SG2gnLixwB7pdtBQhSj1EMh3njZtQKysvW44HK0z6aM",
+        Authorization: token,
       },
     });
-    console.log(res);
+    console.log(res.data);
     dispatch({ type: GET_CART_SUCCESS, payload: res.data.data });
   } catch (error) {
     console.log(error);
@@ -30,12 +30,17 @@ export const get_cart = () => async (dispatch) => {
 
 export const add_to_cart = (product) => async (dispatch) => {
   try {
-    let res = await axios.post(`${baseURL}/cart`, product, {
+    let res = await axios({
+      method: "post",
+      baseURL,
+      url: "cart/add",
       headers: {
         Authorization: token,
       },
+      body: product,
     });
-    dispatch(get_cart());
+    console.log(res);
+    dispatch({ type: ADD_TO_CART, payload: res.data });
   } catch (err) {
     console.log(err.response.data);
   }

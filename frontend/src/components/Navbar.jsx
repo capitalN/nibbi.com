@@ -81,7 +81,7 @@ export default function Navbar() {
             <SearchDrower />
           </Stack>
           <Stack>
-            {false ? (
+            {isAuth ? (
               <Account />
             ) : (
               <Link to="/login">

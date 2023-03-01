@@ -11,7 +11,13 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { Link, useParams } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { baseURL } from "../utils/url";
 import axios from "axios";
 import { ButtonStyle } from "../styles/global";
@@ -26,7 +32,6 @@ const initialData = {
 export default function Login() {
   const dispatch = useDispatch();
   const { isAuth } = useSelector((store) => store.authManager);
-
   const [inputData, setInputData] = useState(initialData);
 
   const handleChange = (e) => {
@@ -39,11 +44,6 @@ export default function Login() {
     dispatch(user_login(inputData));
     setInputData(initialData);
   };
-
-  const Router = useParams();
-  if (isAuth) {
-    Router.back();
-  }
 
   return (
     <Center h="91vh">
