@@ -2,8 +2,9 @@ const { default: mongoose } = require("mongoose");
 
 const CartSchema = mongoose.Schema({
   userId: String,
-  item: Object,
   quantity: Number,
+  cartId: Number,
+  item: Object,
 });
 
 const CartModel = mongoose.model("cart", CartSchema);

@@ -10,6 +10,7 @@ import {
   Image,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +24,12 @@ export default function SingleProduct() {
   const dispatch = useDispatch();
   const { id } = useParams();
 
+  const toast = useToast();
+
   const { PRODUCTS } = useSelector((store) => store.productsManager);
+  const { CART, payload, loading, error } = useSelector(
+    (store) => store.cartManager
+  );
 
   const ITEM = PRODUCTS[0];
 
@@ -36,19 +42,35 @@ export default function SingleProduct() {
   }, [id]);
 
   const handleAdd = (id) => {
-    console.log(id);
+    // const existing = [...CART].filter((el) => {
+    //   if (el.cartId === id) {
+    //     return true;
+    //   }
+    // });
+
+    // if (existing) {
+    //   toast({
+    //     title: "product is already in the cart",
+    //     status: "warning",
+    //     duration: 9000,
+    //     isClosable: true,
+    //   });
+    // } else {
+
     dispatch(
       add_to_cart({
         quantity: 1,
+        cartId: id,
+        item: ITEM,
       })
     );
+    toast({
+      title: "product added sccessfully",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
   };
-
-  useEffect(() => {
-    dispatch(get_cart());
-  }, []);
-
-  // console.log(ITEM);
 
   return (
     PRODUCTS.length && (
@@ -81,12 +103,19 @@ export default function SingleProduct() {
             <Text>CATEGORY : {ITEM.category}</Text>
             <Text>TYPE : {ITEM.product_type}</Text>
             <Text>TAGS : {ITEM.tag_list}</Text>
-            <Button {...ButtonStyle} onClick={() => handleAdd(ITEM._id)}>
+            <Button
+              {...ButtonStyle}
+              onClick={() => handleAdd(ITEM._id)}
+              isLoading={loading}
+            >
               ADD TO CART
             </Button>
             <Divider />
             <Text>DESCRIPTION</Text>
-            <Text>{ITEM.description}</Text>
+            <Text>
+              {ITEM.description ||
+                "all natural ingredients that applies like a soft cream but finishes like a silky powder. Antioxidant-rich botanicals help moisturize the skin, while natural pigments provide long-lasting buildable color for a healthy, radiant glow. Made with natural and organic ingredients"}
+            </Text>
           </Stack>
         </Grid>
       </>

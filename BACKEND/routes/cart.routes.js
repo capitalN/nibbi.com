@@ -7,7 +7,7 @@ CartRouter.get("/", async (req, res) => {
   var { userId } = jwt.verify(token, "dermstore");
   try {
     const cart = await CartModel.find({ userId });
-    res.send({ msg: "all cart items are here", cart });
+    res.send(cart);
   } catch (error) {
     res.send({ msg: "error in getting cart items", error });
   }
@@ -20,7 +20,7 @@ CartRouter.post("/add", (req, res) => {
   try {
     const cart = new CartModel({ ...body, userId });
     cart.save();
-    res.send({ msg: "added cart item" });
+    res.send(body);
   } catch (error) {
     res.send({ msg: "error in adding cart item", error });
   }
@@ -44,16 +44,16 @@ CartRouter.patch("/update/:id", async (req, res) => {
   }
 });
 
-CartRouter.patch("/delete/:id", async (req, res) => {
+CartRouter.delete("/delete/:id", async (req, res) => {
   const itemId = req.params.id;
-  const cartItem = await CartModel.findById({ _id: itemId });
+  const cartItem = await CartModel.findByIdAndDelete({ _id: itemId });
   const userInCart = cartItem.userId;
   const userMakingReq = req.body.userId;
   try {
     if (userInCart == userMakingReq) {
       res.send({ msg: "deleted cart item" });
     } else {
-      res.send({ msg: "you'r not allowed to delete" });
+      res.send({ msg: "you'r not authorized to delete this item" });
     }
   } catch (error) {
     res.send({ msg: "error in deleting cart item", error });

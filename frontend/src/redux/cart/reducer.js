@@ -1,8 +1,11 @@
 // import * as types from "./cart.types";
 
 import {
-  ADD_TO_CART,
+  ADD_CART_ERROR,
+  ADD_CART_LOADING,
+  ADD_CART_SUCCESS,
   DELETE_FROM_CART,
+  DELETE_FROM_CART_LOADING,
   EMPTY_CART,
   GET_CART_ERROR,
   GET_CART_LOADING,
@@ -14,6 +17,7 @@ const initialState = {
   CART: [],
   loading: false,
   error: false,
+  payload: null,
 };
 
 export const CartReducer = (state = initialState, { type, payload }) => {
@@ -41,12 +45,31 @@ export const CartReducer = (state = initialState, { type, payload }) => {
       };
     }
 
-    case ADD_TO_CART: {
+    case ADD_CART_SUCCESS: {
       return {
         ...state,
         loading: false,
+        error: false,
+        CART: [...state.CART, payload],
       };
     }
+    case ADD_CART_LOADING: {
+      return {
+        ...state,
+        loading: true,
+        error: false,
+        payload,
+      };
+    }
+    case ADD_CART_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        payload,
+      };
+    }
+
     case UPDATE_CART: {
       let updated = state.CART.map((el) => {
         if (el.id === payload.id) {
@@ -64,6 +87,13 @@ export const CartReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         CART: filtered,
+      };
+    }
+    case DELETE_FROM_CART_LOADING: {
+      let filtered = state.CART.filter((el) => el._id !== payload);
+      return {
+        ...state,
+        loading: true,
       };
     }
     case EMPTY_CART: {

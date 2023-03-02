@@ -1,7 +1,9 @@
 import { baseURL } from "../../utils/url";
 import axios from "axios";
 import {
-  ADD_TO_CART,
+  ADD_CART_ERROR,
+  ADD_CART_LOADING,
+  ADD_CART_SUCCESS,
   DELETE_FROM_CART,
   EMPTY_CART,
   GET_CART_ERROR,
@@ -20,8 +22,7 @@ export const get_cart = () => async (dispatch) => {
         Authorization: token,
       },
     });
-    console.log(res.data);
-    dispatch({ type: GET_CART_SUCCESS, payload: res.data.data });
+    dispatch({ type: GET_CART_SUCCESS, payload: res.data });
   } catch (error) {
     console.log(error);
     dispatch({ type: GET_CART_ERROR });
@@ -29,6 +30,7 @@ export const get_cart = () => async (dispatch) => {
 };
 
 export const add_to_cart = (product) => async (dispatch) => {
+  dispatch({ type: ADD_CART_LOADING });
   try {
     let res = await axios({
       method: "post",
@@ -37,12 +39,12 @@ export const add_to_cart = (product) => async (dispatch) => {
       headers: {
         Authorization: token,
       },
-      body: product,
+      data: product,
     });
-    console.log(res);
-    dispatch({ type: ADD_TO_CART, payload: res.data });
+    await dispatch({ type: ADD_CART_SUCCESS, payload: res.data });
   } catch (err) {
     console.log(err.response.data);
+    dispatch({ type: ADD_CART_ERROR, payload: err });
   }
 };
 
@@ -54,12 +56,11 @@ export const update_cart =
   };
 
 export const delete_from_cart = (id) => async (dispatch) => {
-  let res = await axios.delete(`${baseURL}/cart/${id}`, {
+  let res = await axios.delete(`${baseURL}/cart/delete/${id}`, {
     headers: {
       Authorization: token,
     },
   });
-  console.log(res.data);
   dispatch({ type: DELETE_FROM_CART, payload: id });
 };
 
