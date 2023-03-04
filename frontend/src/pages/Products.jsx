@@ -9,6 +9,8 @@ import {
   Skeleton,
   Image,
   Badge,
+  HStack,
+  Heading,
 } from "@chakra-ui/react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import React, { useEffect, useRef } from "react";
@@ -37,65 +39,74 @@ export default function Products() {
       </Show>
       <Grid
         gridTemplateColumns={{
-          base: "repeat(2,1fr)",
+          base: "repeat(1,1fr)",
           sm: "repeat(2,1fr)",
-          md: "repeat(3,1fr)",
-          lg: "repeat(4,1fr)",
-          xl: "repeat(5,1fr)",
+          md: "repeat(2,1fr)",
+          lg: "repeat(3,1fr)",
+          xl: "repeat(4,1fr)",
         }}
       >
         <Show above="lg">
-          <GridItem rowSpan={50000} colSpan={1}>
+          <GridItem
+            rowSpan={50000}
+            colSpan={1}
+            m="10px"
+            border={"1px solid #d6d6d6"}
+          >
             <FilterComponent />
           </GridItem>
         </Show>
         {PRODUCTS.length &&
           PRODUCTS?.map((product) => (
-            <Stack
+            <Skeleton
+              isLoaded={!loading}
+              h="400px"
+              backgroundSize="cover"
+              backgroundRepeat={"no-repeat"}
+              backgroundPosition="center"
+              bgImage={product.api_featured_image}
+              position="relative"
+              border={"1px solid #d6d6d6"}
+              justify="space-between"
+              textTransform={"uppercase"}
               as={Link}
-              to={`/products/${product._id}`}
-              key={product._id}
-              justify={"space-between"}
-              align="center"
-              border={"1px solid #D6D6D6"}
-              p="10px 5px"
-              position={"relative"}
-              textAlign="center"
+              to={`${product._id}`}
+              m="10px"
+              _hover={{ border: "1px solid black" }}
             >
-              <Skeleton
-                isLoaded={!loading}
-                display="inline-block"
-                overflowY={"hidden"}
-                h="250px"
+              <Stack
+                position="absolute"
+                bottom={"0"}
                 w="100%"
-              >
-                <Image
-                  src={product.api_featured_image}
-                  alt={product.name}
-                  w="100%"
-                />
-              </Skeleton>
-              <Divider />
-              <Box
-                overflow={"hidden !important"}
-                display={"inline-block"}
-                whiteSpace="nowrap"
-                textOverflow={"ellipsis"}
-                w={{ base: "170px" }}
+                p="10px"
+                // bgColor={"rgba(0, 0, 0, 0.5)"}
+                // color="white"
+                bgColor={"white"}
               >
                 <Text
-                  fontSize={"lg"}
                   overflow={"hidden !important"}
+                  display={"inline-block"}
+                  whiteSpace="nowrap"
                   textOverflow={"ellipsis"}
+                  w={{ base: "250px" }}
+                  fontWeight="bold"
                 >
-                  {product.brand ? product.brand.toUpperCase() : "BRAND"}
-                </Text>
-                <Text overflow={"hidden !important"} textOverflow={"ellipsis"}>
                   {product.name}
                 </Text>
-                <Badge>$ {product.price}</Badge>
-              </Box>
-            </Stack>
+                <HStack justify={"space-between"}>
+                  <Text
+                    overflow={"hidden !important"}
+                    display={"inline-block"}
+                    whiteSpace="nowrap"
+                    textOverflow={"ellipsis"}
+                    w="200px"
+                  >
+                    {product.brand || "brand"}
+                  </Text>
+                  <Text>$ {product.price}</Text>
+                </HStack>
+              </Stack>
+            </Skeleton>
           ))}
       </Grid>
     </>

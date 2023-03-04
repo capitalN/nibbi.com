@@ -89,9 +89,10 @@ export default function Navbar() {
               </Link>
             )}
           </Stack>
-          <Stack>
-            <CartDrower />
-          </Stack>
+          <Link to="/cart">
+            <RiShoppingBagLine size={"25px"} />
+            {/* <CartDrower /> */}
+          </Link>
         </Stack>
       </HStack>
     </>

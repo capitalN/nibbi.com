@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import { Box } from "@chakra-ui/react";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
@@ -19,8 +20,8 @@ function App() {
         <Route path="/products/:id" element={<SingleProduct />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/cart" element={<Cart />} />
         {/* <Route path="/" element={<Home />} />
-        <Route path="/" element={<Home />} />
         <Route path="/" element={<Home />} /> */}
       </Routes>
     </Box>
