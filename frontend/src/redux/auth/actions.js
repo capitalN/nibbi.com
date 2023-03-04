@@ -8,14 +8,15 @@ export const user_register = (data) => async (dispatch) => {
       method: "POST",
       baseURL,
       url: `users/register`,
-      data: { name: "anna", email: "anna@gmail.com", password: "anna" },
+      data,
     });
+
     dispatch({
       type: USER_REGISTER,
       payload: res.data,
     });
   } catch (error) {
-    console.log(error);
+    alert(error.response.data.msg);
   }
 };
 
@@ -25,14 +26,14 @@ export const user_login = (data) => async (dispatch) => {
       method: "POST",
       baseURL,
       url: `users/login`,
-      data: { email: "anna@gmail.com", password: "anna" },
+      data,
     });
-    console.log(res.data);
     dispatch({
       type: USER_LOGIN,
       payload: res.data,
     });
+    console.log(res);
   } catch (error) {
-    console.log(error);
+    alert(error.response.data.msg);
   }
 };

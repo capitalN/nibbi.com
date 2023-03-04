@@ -15,20 +15,22 @@ UserRouter.post("/register", async (req, res) => {
   try {
     const user = await UserModel.find({ email });
     if (user.length) {
-      res.send({ msg: "user already exist please login" });
+      res.status(500).send({ msg: "user already exist please login" });
     } else {
       bcrypt.hash(password, 5, (err, hash) => {
         if (err) {
-          res.send({ msg: "ERROR, register error (bcrypt)", error: err });
+          res
+            .status(500)
+            .send({ msg: "ERROR, register error (bcrypt)", error: err });
         } else {
           const user = new UserModel({ ...payload, password: hash });
           user.save();
-          res.send({ msg: "register success", user: user.email });
+          res.send({ msg: `you are registered successfully` });
         }
       });
     }
   } catch (error) {
-    res.send({ msg: "ERROR, register error", error });
+    res.status(500).send({ msg: "ERROR, register error", error });
   }
 });
 
@@ -48,14 +50,14 @@ UserRouter.post("/login", async (req, res) => {
             token,
           });
         } else {
-          res.send({ msg: "ERROR, wrong credentials", error: err });
+          res.status(500).send({ msg: "ERROR, wrong credentials", error: err });
         }
       });
     } else {
-      res.send({ msg: "ERROR, user not found, please login" });
+      res.status(500).send({ msg: "ERROR, user not found, please login" });
     }
   } catch (error) {
-    res.send({ msg: "ERROR, login failed", error });
+    res.status(500).send({ msg: "ERROR, login failed", error });
   }
 });
 

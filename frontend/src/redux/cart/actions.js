@@ -22,9 +22,9 @@ export const get_cart = () => async (dispatch) => {
         Authorization: token,
       },
     });
+    console.log(res.data);
     dispatch({ type: GET_CART_SUCCESS, payload: res.data });
   } catch (error) {
-    console.log(error);
     dispatch({ type: GET_CART_ERROR });
   }
 };
@@ -41,19 +41,20 @@ export const add_to_cart = (product) => async (dispatch) => {
       },
       data: product,
     });
+    console.log(res.data);
     await dispatch({ type: ADD_CART_SUCCESS, payload: res.data });
+    dispatch(get_cart());
   } catch (err) {
-    console.log(err.response.data);
     dispatch({ type: ADD_CART_ERROR, payload: err });
   }
 };
 
-export const update_cart =
-  ({ id, a }) =>
-  async (dispatch) => {
-    let res = await axios.patch(`${baseURL}/cart/${id}`, { count: a });
-    dispatch({ type: UPDATE_CART, payload: res.data });
-  };
+// export const update_cart =
+//   ({ id, a }) =>
+//   async (dispatch) => {
+//     let res = await axios.patch(`${baseURL}/cart/${id}`, { count: a });
+//     dispatch({ type: UPDATE_CART, payload: res.data });
+//   };
 
 export const delete_from_cart = (id) => async (dispatch) => {
   let res = await axios.delete(`${baseURL}/cart/delete/${id}`, {
@@ -61,6 +62,7 @@ export const delete_from_cart = (id) => async (dispatch) => {
       Authorization: token,
     },
   });
+  console.log(id);
   dispatch({ type: DELETE_FROM_CART, payload: id });
 };
 

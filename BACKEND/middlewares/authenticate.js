@@ -5,14 +5,14 @@ const authenticate = (req, res, next) => {
   if (token) {
     jwt.verify(token, "dermstore", (err, decoded) => {
       if (err) {
-        res.send("not authorized");
+        res.status(500).send("not authorized");
       } else {
         req.body.userId = decoded.userId;
         next();
       }
     });
   } else {
-    res.send("please login first");
+    res.status(500).send("please login first");
   }
 };
 

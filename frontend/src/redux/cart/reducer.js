@@ -89,13 +89,6 @@ export const CartReducer = (state = initialState, { type, payload }) => {
         CART: filtered,
       };
     }
-    case DELETE_FROM_CART_LOADING: {
-      let filtered = state.CART.filter((el) => el._id !== payload);
-      return {
-        ...state,
-        loading: true,
-      };
-    }
     case EMPTY_CART: {
       return {
         ...state,

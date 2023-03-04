@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   DrawerBody,
@@ -17,6 +17,8 @@ import {
   Image,
   Stack,
   Skeleton,
+  useStatStyles,
+  Heading,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -30,8 +32,10 @@ import { ButtonStyle } from "../styles/global";
 import { delete_from_cart, get_cart } from "../redux/cart/actions";
 
 export default function CartDrower() {
-  const { CART, loading } = useSelector((store) => store.cartManager);
+  const { CART } = useSelector((store) => store.cartManager);
+  const { token, isAuth } = useSelector((store) => store.authManager);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(get_cart());
   }, []);
@@ -40,65 +44,89 @@ export default function CartDrower() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
+  if ((!token && !isAuth) || !CART) {
+    return;
+  }
+
+  console.log(CART);
+
   return (
-    <>
-      <button onClick={onOpen}>
-        <RiShoppingBagLine size={"25px"} />
-      </button>
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>CART</DrawerHeader>
-          <Divider />
-          <DrawerBody>
-            {CART.length &&
-              CART.map((el) => (
-                <div key={el.item._id}>
-                  <Skeleton isLoaded={!loading}>
-                    <VStack>
-                      <Box
-                        display="inline-block"
-                        overflowY={"hidden"}
-                        h="250px"
-                        w="100%"
-                      >
+    token && (
+      <>
+        <button onClick={onOpen}>
+          <RiShoppingBagLine size={"25px"} />
+        </button>
+        <Drawer
+          isOpen={isOpen}
+          placement="right"
+          onClose={onClose}
+          finalFocusRef={btnRef}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>CART</DrawerHeader>
+            <Divider />
+            <DrawerBody>
+              {CART.length ? (
+                CART?.map((el) => (
+                  <div key={el.item._id}>
+                    <Stack border={"1px solid #d6d6d6"} m="15px" h="280px">
+                      <HStack justify={"space-between"} p="8px">
+                        <Text>{el.item.name}</Text>
+                        <Text
+                          cursor={"pointer"}
+                          onClick={() => dispatch(delete_from_cart(el._id))}
+                          color="red"
+                        >
+                          X
+                        </Text>
+                      </HStack>
+
+                      <Box display="inline-block" overflowY={"hidden"} w="100%">
                         <Image
                           src={el.item.api_featured_image}
-                          alt={el.item.brand}
+                          alt={el.item.name}
                         />
                       </Box>
-                      <button
-                        onClick={() => dispatch(delete_from_cart(el._id))}
-                        // onClick={()=>{console.log(el._id)}}
+                      <HStack
+                        justify={"space-between"}
+                        border="1px solid"
+                        p="10px"
+                        bgColor={"black"}
+                        color="white"
+                        fontWeight={"bold"}
                       >
-                        delete
-                      </button>
-
-                      <Text>{el.item.brand}</Text>
-                    </VStack>
-                  </Skeleton>
-                </div>
-              ))}
-          </DrawerBody>
-          <DrawerFooter justifyContent={"space-between"}>
-            <Button
-              as={Link}
-              to="/checkout"
-              {...ButtonStyle}
-              w="100%"
-              onClick={onClose}
-            >
-              CHECKOUT
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </>
+                        <Text>{el.item.brand}</Text>
+                        <Text>$ {el.item.price}</Text>
+                      </HStack>
+                    </Stack>
+                  </div>
+                ))
+              ) : (
+                <Box>
+                  <Image
+                    w="100%"
+                    src="https://media.istockphoto.com/id/841884438/vector/empty-shopping-bag-icon-cute-disappointed-shopping-bag-flat-thin-line-design-isolated-vector.jpg?s=612x612&w=0&k=20&c=q4-NaJiL4BG8kIEIsU5N0Wgy_9zv6_dJutV1qfs1_x4="
+                  />
+                </Box>
+              )}
+            </DrawerBody>
+            <DrawerFooter justifyContent={"space-between"}>
+              <Button
+                as={Link}
+                to="/checkout"
+                colorScheme={""}
+                borderRadius="0"
+                w="100%"
+                onClick={onClose}
+              >
+                CHECKOUT
+              </Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </>
+    )
   );
 }

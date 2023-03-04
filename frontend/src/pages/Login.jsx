@@ -23,6 +23,7 @@ import axios from "axios";
 import { ButtonStyle } from "../styles/global";
 import { useDispatch, useSelector } from "react-redux";
 import { user_login } from "../redux/auth/actions";
+import useToastCompo from "../utils/useToast";
 
 const initialData = {
   email: "",
@@ -31,19 +32,29 @@ const initialData = {
 
 export default function Login() {
   const dispatch = useDispatch();
-  const { isAuth } = useSelector((store) => store.authManager);
+  const { isAuth, token, payload } = useSelector((store) => store.authManager);
   const [inputData, setInputData] = useState(initialData);
+  const { Toast } = useToastCompo();
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputData({ ...inputData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(user_login(inputData));
-    setInputData(initialData);
+    await dispatch(user_login(inputData));
+    window.location.reload();
   };
+
+  useEffect(() => {
+    if (token && isAuth) {
+      Toast("login successfull", "success");
+      navigate("/");
+    }
+  }, []);
 
   return (
     <Center h="91vh">

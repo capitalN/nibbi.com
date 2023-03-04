@@ -1,3 +1,4 @@
+import useToastCompo from "../../utils/useToast";
 import { USER_LOGIN, USER_REGISTER } from "./actionTypes";
 
 let token = localStorage.getItem("token") || null;
@@ -7,11 +8,13 @@ const initialState = {
   token,
   isAuth: !!token,
   user,
+  payload: "",
 };
 
 export const AuthReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case USER_REGISTER: {
+      alert("you are registered successfully, please login");
       return {
         ...state,
         payload,
