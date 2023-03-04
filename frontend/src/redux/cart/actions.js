@@ -46,12 +46,22 @@ export const add_to_cart = (product) => async (dispatch) => {
   }
 };
 
-// export const update_cart =
-//   ({ id, a }) =>
-//   async (dispatch) => {
-//     let res = await axios.patch(`${baseURL}/cart/${id}`, { count: a });
-//     dispatch({ type: UPDATE_CART, payload: res.data });
-//   };
+export const update_cart = (id, data) => async (dispatch) => {
+  try {
+    let res = await axios({
+      method: "patch",
+      baseURL,
+      url: `cart/update/${id}`,
+      headers: {
+        Authorization: token,
+      },
+      data,
+    });
+    dispatch({ type: UPDATE_CART, payload: res.data });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const delete_from_cart = (id) => async (dispatch) => {
   let res = await axios.delete(`${baseURL}/cart/delete/${id}`, {

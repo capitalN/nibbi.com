@@ -24,30 +24,28 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  RiShoppingCartLine,
-  RiAccountCircleLine,
-  RiShoppingBagLine,
-} from "react-icons/ri";
 
 import { Link } from "react-router-dom";
 import { ButtonStyle } from "../styles/global";
-import { delete_from_cart, get_cart } from "../redux/cart/actions";
+import { delete_from_cart, get_cart, update_cart } from "../redux/cart/actions";
 
 export default function Cart() {
-  const { CART } = useSelector((store) => store.cartManager);
+  const store = useSelector((store) => store.cartManager);
   const { token, isAuth } = useSelector((store) => store.authManager);
   const dispatch = useDispatch();
+
+  const CART = store.CART || [];
 
   useEffect(() => {
     dispatch(get_cart());
   }, []);
 
-  if ((!token && !isAuth) || !CART) {
-    return;
-  }
-
   let total = CART.reduce((acc, el, i) => acc + el.item.price * el.quantity, 0);
+
+  const handleUpdate = (id, qty, val) => {
+    let quantity = qty + val;
+    dispatch(update_cart(id, { quantity }));
+  };
 
   return (
     token && (
@@ -66,8 +64,8 @@ export default function Cart() {
           gridTemplateColumns={{
             base: "repeat(1,1fr)",
             sm: "repeat(2,1fr)",
-            md: "repeat(3,1fr)",
-            lg: "repeat(4,1fr)",
+            md: "repeat(2,1fr)",
+            lg: "repeat(3,1fr)",
             xl: "repeat(4,1fr)",
           }}
           textTransform="uppercase"
@@ -80,12 +78,11 @@ export default function Cart() {
               textTransform={"uppercase"}
               _hover={{ border: "1px solid black" }}
               m="10px"
+              h="400px"
             >
               <Box
                 display="inline-block"
                 overflowY={"hidden"}
-                // h="250px"
-                // w="100%"
                 as={Link}
                 to={`/products/${cart.item._id}`}
               >
@@ -120,11 +117,23 @@ export default function Cart() {
                 </HStack>
                 <HStack justify={"space-between"}>
                   <HStack gap="5px">
-                    <button>-</button>
+                    <button
+                      onClick={() => handleUpdate(cart._id, cart.quantity, -1)}
+                      disabled={cart.quantity === 1}
+                    >
+                      -
+                    </button>
                     <button>{cart.quantity}</button>
-                    <button>+</button>
+                    <button
+                      onClick={() => handleUpdate(cart._id, cart.quantity, +1)}
+                      disabled={cart.quantity === 10}
+                    >
+                      +
+                    </button>
                   </HStack>
-                  <button>remove</button>
+                  <button onClick={() => dispatch(delete_from_cart(cart._id))}>
+                    remove
+                  </button>
                 </HStack>
               </Stack>
             </Stack>

@@ -29,16 +29,12 @@ CartRouter.post("/add", (req, res) => {
 CartRouter.patch("/update/:id", async (req, res) => {
   const payload = req.body;
   const itemId = req.params.id;
-  const cartItem = await CartModel.findById({ _id: itemId });
-  const userInCart = cartItem.userId;
-  const userMakingReq = req.body.userId;
   try {
-    if (userInCart == userMakingReq) {
-      await CartModel.findByIdAndUpdate({ _id: id }, payload);
-      res.send({ msg: "cart item updated" });
-    } else {
-      res.status(500).send({ msg: "you'r not allowed to update" });
-    }
+    let item = await CartModel.findByIdAndUpdate({ _id: itemId }, payload, {
+      new: true,
+    });
+    console.log(item);
+    res.send(item);
   } catch (error) {
     res.status(500).send({ msg: "error in updating cart item", error });
   }
