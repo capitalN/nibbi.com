@@ -26,7 +26,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
-import { ButtonStyle } from "../styles/global";
+import { BorderStyle, ButtonStyle } from "../styles/global";
 import { delete_from_cart, get_cart, update_cart } from "../redux/cart/actions";
 
 export default function Cart() {
@@ -41,6 +41,7 @@ export default function Cart() {
   }, []);
 
   let total = CART.reduce((acc, el, i) => acc + el.item.price * el.quantity, 0);
+  localStorage.setItem("total", total.toFixed(2));
 
   const handleUpdate = (id, qty, val) => {
     let quantity = qty + val;
@@ -50,14 +51,13 @@ export default function Cart() {
   return (
     token && (
       <Box h="100vh">
-        <HStack
-          p="20px"
-          border={"1px solid #d6d6d6"}
-          m="10px"
-          justify={"space-between"}
-        >
-          <Heading fontFamily={"inherit"}>BAG ($ {total})</Heading>
-          <Button {...ButtonStyle}>CHECKOUT</Button>
+        <HStack {...BorderStyle} justify={"space-between"}>
+          <Heading fontFamily={"inherit"} size="md">
+            BAG (${total.toFixed(1)})
+          </Heading>
+          <Button {...ButtonStyle} as={Link} to="/checkout">
+            CHECKOUT
+          </Button>
         </HStack>
 
         <Grid
@@ -72,12 +72,11 @@ export default function Cart() {
         >
           {CART.map((cart) => (
             <Stack
-              p="20px"
+              {...BorderStyle}
               border={"1px solid #d6d6d6"}
               justify="space-between"
               textTransform={"uppercase"}
               _hover={{ border: "1px solid black" }}
-              m="10px"
               h="400px"
             >
               <Box
@@ -111,7 +110,7 @@ export default function Cart() {
                     textOverflow={"ellipsis"}
                     w={{ base: "170px" }}
                   >
-                    by {cart.item.brand || "brand"}
+                    {cart.item.brand || "brand"}
                   </Text>
                   <Text>$ {cart.item.price}</Text>
                 </HStack>

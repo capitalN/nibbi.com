@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import FilterComponent, { FilterDrower } from "../components/FilterComponent";
 import { get_products } from "../redux/products/actions";
+import { BorderStyle } from "../styles/global";
 
 export default function Products() {
   const { PRODUCTS, loading } = useSelector((store) => store.productsManager);
@@ -50,7 +51,7 @@ export default function Products() {
           <GridItem
             rowSpan={50000}
             colSpan={1}
-            m="10px"
+            {...BorderStyle}
             border={"1px solid #d6d6d6"}
           >
             <FilterComponent />
@@ -58,31 +59,30 @@ export default function Products() {
         </Show>
         {PRODUCTS.length &&
           PRODUCTS?.map((product) => (
-            <Skeleton
-              isLoaded={!loading}
-              h="400px"
-              backgroundSize="cover"
-              backgroundRepeat={"no-repeat"}
-              backgroundPosition="center"
-              bgImage={product.api_featured_image}
-              position="relative"
+            <Stack
+              p="20px"
               border={"1px solid #d6d6d6"}
               justify="space-between"
               textTransform={"uppercase"}
-              as={Link}
-              to={`${product._id}`}
-              m="10px"
               _hover={{ border: "1px solid black" }}
+              m="10px"
+              h="400px"
+              as={Link}
+              to={`/products/${product._id}`}
             >
-              <Stack
-                position="absolute"
-                bottom={"0"}
-                w="100%"
-                p="10px"
-                // bgColor={"rgba(0, 0, 0, 0.5)"}
-                // color="white"
-                bgColor={"white"}
+              <Skeleton
+                isLoaded={!loading}
+                display="inline-block"
+                overflowY={"hidden"}
               >
+                <Image
+                  src={product.api_featured_image}
+                  alt={product.name}
+                  w="100%"
+                />
+              </Skeleton>
+
+              <Stack>
                 <Text
                   overflow={"hidden !important"}
                   display={"inline-block"}
@@ -99,14 +99,14 @@ export default function Products() {
                     display={"inline-block"}
                     whiteSpace="nowrap"
                     textOverflow={"ellipsis"}
-                    w="200px"
+                    w={{ base: "200px" }}
                   >
                     {product.brand || "brand"}
                   </Text>
                   <Text>$ {product.price}</Text>
                 </HStack>
               </Stack>
-            </Skeleton>
+            </Stack>
           ))}
       </Grid>
     </>

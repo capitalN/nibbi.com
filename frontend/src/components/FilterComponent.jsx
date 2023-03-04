@@ -24,9 +24,14 @@ import {
 import { Link, useNavigate, useParams } from "react-router-dom";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { BorderStyle } from "../styles/global";
+import { useState } from "react";
 
 export default function FilterComponent() {
   let navigate = useNavigate();
+
+  const [params, setParams] = useState({});
+
   const handleFilter = (main, sub) => {
     if (main === "price") {
       navigate(`?min=${sub[0]}&max${sub[2]}`);
@@ -34,13 +39,15 @@ export default function FilterComponent() {
       navigate(`?${main}=${sub}`);
     } else if (main === "sort") {
       navigate(`?${main}=${sub[2]}`);
+    } else if (main === "category") {
+      navigate(`?${main}=${sub}`);
     }
   };
 
   return (
-    <Box position={"sticky"} top="65px">
-      <Stack p="10px" textAlign="left">
-        <Stack p="15px" position={"relative"}>
+    <Box position={"sticky"} top="75px" h="100vh">
+      <Stack textAlign="left">
+        <Stack position={"relative"}>
           <HStack w="100%" justify={"space-between"}>
             <Heading size={"md"}>FILTERS</Heading>
             <Link to={""}>RESET</Link>
@@ -118,10 +125,6 @@ export function FilterDrower() {
 
 export const filters = [
   {
-    title: "category",
-    subtitles: ["blush", "bronzer", "eyeliner", "lipstick", "nail_polish"],
-  },
-  {
     title: "sort",
     subtitles: [
       ["A to Z", " ", "brand"],
@@ -148,16 +151,6 @@ export const filters = [
       "marcelle",
       "marienatie",
       "maybelline",
-      "milani",
-      "mineral fusion",
-      "nyx",
-      "pacifica",
-      "physicians formula",
-      "pure anada",
-      "revlon",
-      "smashbox",
-      "suncoat",
-      "wet n wild",
     ],
   },
   {

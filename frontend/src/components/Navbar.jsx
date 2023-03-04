@@ -23,7 +23,7 @@ import {
   DrawerFooter,
   PopoverArrow,
 } from "@chakra-ui/react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import SearchDrower from "./SearchDrower";
 import Account from "./Account";
 import { useSelector } from "react-redux";
@@ -32,24 +32,25 @@ import {
   RiAccountCircleLine,
   RiShoppingBagLine,
 } from "react-icons/ri";
-import CartDrower from "./CartDrawer";
+import { BorderStyle } from "../styles/global";
 
 export default function Navbar() {
   const { query } = useParams();
   const { isAuth } = useSelector((store) => store.authManager);
+
+  const { pathname } = useLocation();
+
   return (
     <>
       <HStack
         justify={"space-between"}
-        p="5px 20px"
         bgColor={"white"}
         zIndex="1000"
-        w="100%"
         h="65px"
-        border={"1px solid #D6D6D6"}
-        position={"sticky"}
+        {...BorderStyle}
         top="0"
         as={"navbar"}
+        position={"sticky"}
       >
         <Show below="lg">
           <NavDrawer />
