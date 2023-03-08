@@ -8,6 +8,7 @@ import {
   Heading,
   HStack,
   Image,
+  Skeleton,
   Stack,
   Text,
   useToast,
@@ -18,21 +19,16 @@ import { useLocation, useParams } from "react-router-dom";
 
 import { add_to_cart, get_cart } from "../redux/cart/actions";
 import { get_single_product } from "../redux/products/actions";
-import { BoxStyle, ButtonStyle } from "../styles/global";
-
-const token = localStorage.getItem("token");
+import { BorderStyle, BoxStyle, ButtonStyle } from "../styles/global";
 
 export default function SingleProduct() {
   const dispatch = useDispatch();
   const { id } = useParams();
-
   const toast = useToast();
-
-  const { PRODUCTS } = useSelector((store) => store.productsManager);
-  const { CART, payload, loading, error } = useSelector(
-    (store) => store.cartManager
+  const { PRODUCTS, error, payload, loading } = useSelector(
+    (store) => store.productsManager
   );
-
+  const { token, isAuth, user } = useSelector((store) => store.authManager);
   const ITEM = PRODUCTS[0];
 
   useEffect(() => {
@@ -43,49 +39,32 @@ export default function SingleProduct() {
     }
   }, [id]);
 
-  const handleAdd = (id) => {
-    // const existing = [...CART].filter((el) => {
-    //   if (el.cartId === id) {
-    //     return true;
-    //   }
-    // });
-
-    // if (existing) {
-    //   toast({
-    //     title: "product is already in the cart",
-    //     status: "warning",
-    //     duration: 9000,
-    //     isClosable: true,
-    //   });
-    // } else {
-
-    if (!token) {
+  const handleAdd = async (id) => {
+    if (!isAuth) {
       toast({
-        title: "please login first",
+        title: "Please login first",
         status: "warning",
         duration: 3000,
         isClosable: true,
       });
-    } else {
-      dispatch(
-        add_to_cart({
-          quantity: 1,
-          cartId: id,
-          item: ITEM,
-        })
-      );
-      toast({
-        title: "product added sccessfully",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      return;
     }
+
+    let { email } = user;
+    dispatch(
+      add_to_cart({
+        quantity: 1,
+        cartId: id + email,
+        item: ITEM,
+      })
+    );
   };
 
+  console.log(error);
+
   return (
-    PRODUCTS.length && (
-      <>
+    PRODUCTS?.length && (
+      <Box>
         <Grid
           gridTemplateColumns={{
             base: "repeat(1,1fr)",
@@ -94,17 +73,19 @@ export default function SingleProduct() {
             lg: "repeat(2,1fr)",
           }}
         >
-          <Box {...BoxStyle}>
+          <Skeleton isLoaded={!loading} {...BorderStyle}>
             <Image src={ITEM.api_featured_image} w="100%" />
-          </Box>
-          <Stack {...BoxStyle} gap="10px">
+          </Skeleton>
+          <Stack {...BorderStyle} gap="10px">
             <HStack justify={"space-between"}>
-              <Heading>{ITEM.name}</Heading>
-              <Badge fontSize={"20px"} colorScheme="yellow">
+              <Heading textAlign={"left"} fontFamily="inherit">
+                {ITEM.name}
+              </Heading>
+              <Badge fontSize={"20px"} colorScheme="yellow" >
                 ★ {ITEM.rating || 3.5}
               </Badge>
             </HStack>
-            <Text>by {ITEM.brand.toUpperCase()}</Text>
+            <Text>by {ITEM.brand?.toUpperCase()}</Text>
             <Divider />
             <Text fontWeight={"bold"}>
               ✦ Earn 550 reward points when purchasing this product as a rewards
@@ -125,7 +106,7 @@ export default function SingleProduct() {
             </Text>
           </Stack>
         </Grid>
-      </>
+      </Box>
     )
   );
 }

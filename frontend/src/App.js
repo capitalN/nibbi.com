@@ -10,8 +10,14 @@ import Navbar from "./components/Navbar";
 import { Box, Heading } from "@chakra-ui/react";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Footer from "./components/Footer";
+import { useEffect } from "react";
 
 function App() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    document.documentElement.scrollTop = 0;
+  }, [pathname]);
 
   return (
     <Box textAlign={"justify"}>
@@ -26,6 +32,7 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         {/* <Route path="/" element={<Home />} /> */}
       </Routes>
+      <Footer />
     </Box>
   );
 }

@@ -22,17 +22,19 @@ import {
   DrawerBody,
   DrawerFooter,
   PopoverArrow,
+  DrawerCloseButton,
 } from "@chakra-ui/react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import SearchDrower from "./SearchDrower";
 import Account from "./Account";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   RiShoppingCartLine,
   RiAccountCircleLine,
   RiShoppingBagLine,
 } from "react-icons/ri";
 import { BorderStyle } from "../styles/global";
+import { get_products } from "../redux/products/actions";
 
 export default function Navbar() {
   const { query } = useParams();
@@ -44,13 +46,14 @@ export default function Navbar() {
     <>
       <HStack
         justify={"space-between"}
-        bgColor={"white"}
+        bgColor={pathname === "/" ? "transperent" : "white"}
         zIndex="1000"
         h="65px"
-        {...BorderStyle}
-        top="0"
+        p="20px"
         as={"navbar"}
-        position={"sticky"}
+        position={pathname === "/" ? "fixed" : "sticky"}
+        top="0"
+        w="full"
       >
         <Show below="lg">
           <NavDrawer />
@@ -58,7 +61,7 @@ export default function Navbar() {
 
         <Show above="lg">
           <Box w="120px">
-            <Heading as={Link} to="/" fontFamily="cursive">
+            <Heading as={Link} to="" fontFamily="cursive">
               nibbi
             </Heading>
           </Box>
@@ -68,6 +71,7 @@ export default function Navbar() {
                 <DropDown main={main} />
               </div>
             ))}
+            <Link to="/products">SHOP ALL</Link>
           </HStack>
         </Show>
 
@@ -101,6 +105,12 @@ export default function Navbar() {
 }
 
 const DropDown = ({ main }) => {
+  // const dispatch = useDispatch();
+
+  // const handleClick = (main, sub) => {
+  //   dispatch(get_products({ product_type: main, products_tag: sub }));
+  // };
+
   return (
     <>
       <Popover key={main.type}>
@@ -113,8 +123,8 @@ const DropDown = ({ main }) => {
         </PopoverTrigger>
         <PopoverContent w="auto">
           <PopoverArrow />
-          <Stack justify={"space-between"} p="20px" boxShadow={"xl"}>
-            <Stack w="120px">
+          <Stack justify={"space-between"} p="20px">
+            {/* <Stack w="140px">
               {main.tag.map((tag) => (
                 <Text
                   as={Link}
@@ -125,19 +135,29 @@ const DropDown = ({ main }) => {
                   {tag}
                 </Text>
               ))}
-            </Stack>
+            </Stack> */}
 
-            <Stack w="120px">
-              {main.category.map((category) => (
-                <Text
-                  as={Link}
-                  to={`/products?product_type=${main.type}&category=${category}`}
-                  key={category}
-                  _hover={{ fontWeight: "bold" }}
-                >
-                  {category}
-                </Text>
-              ))}
+            <Stack w="140px">
+              <Text
+                as={Link}
+                to={`/products?product_type=${main.type}`}
+                _hover={{ fontWeight: "bold" }}
+              >
+                ALL
+              </Text>
+              {main.category &&
+                main.category.map((category) => (
+                  <Text
+                    as={Link}
+                    to={`/products?product_type=${main.type}&category=${category}`}
+                    key={category}
+                    _hover={{ fontWeight: "bold" }}
+                    target="_self"
+                    // onClick={() => (document.documentElement.scrollTop = 0)}
+                  >
+                    {category}
+                  </Text>
+                ))}
             </Stack>
           </Stack>
         </PopoverContent>
@@ -162,10 +182,12 @@ export function NavDrawer() {
           finalFocusRef={btnRef}
         >
           <DrawerOverlay />
+
           <DrawerContent>
+            <DrawerCloseButton />
             <DrawerHeader>
-              <Heading as={Link} to="/" fontFamily="mono">
-                LOGO
+              <Heading as={Link} to="" fontFamily="cursive">
+                nibbi
               </Heading>
             </DrawerHeader>
 
@@ -177,22 +199,9 @@ export function NavDrawer() {
                   </div>
                 ))}
               </Stack>
-              <Image
-                src="https://cdn.modesens.com/umedia/1713864s?w=800"
-                position={"absolute"}
-                bottom="0"
-                w="295px"
-              />
             </DrawerBody>
 
-            <DrawerFooter zIndex={"20"}>
-              <Stack w="100%">
-                <Button>{/* <CartDrower /> */}</Button>
-                <Button onClick={onClose} as={Link} to="/login">
-                  LOGIN
-                </Button>
-              </Stack>
-            </DrawerFooter>
+            <DrawerFooter zIndex={"20"}></DrawerFooter>
           </DrawerContent>
         </Drawer>
       </HStack>
@@ -245,7 +254,6 @@ const LINKS = [
   },
   {
     type: "nail_polish",
-    category: [],
     tag: [
       "Natural",
       "Vegan",

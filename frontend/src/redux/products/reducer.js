@@ -9,12 +9,11 @@ const initialState = {
   loading: false,
   error: false,
   payload: "",
-  params: "",
 };
 
 export const ProductReducer = (
   state = initialState,
-  { type, payload, params }
+  { type, payload }
 ) => {
   switch (type) {
     case GET_PRODUCTS_SUCCESS: {
@@ -23,7 +22,6 @@ export const ProductReducer = (
         PRODUCTS: payload,
         loading: false,
         error: false,
-        params,
       };
     }
     case GET_PRODUCTS_LOADING: {

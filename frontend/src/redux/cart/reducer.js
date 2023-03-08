@@ -42,6 +42,7 @@ export const CartReducer = (state = initialState, { type, payload }) => {
         CART: payload,
         loading: false,
         error: true,
+        payload,
       };
     }
 

@@ -11,8 +11,14 @@ import {
   Badge,
   HStack,
   Heading,
+  Center,
 } from "@chakra-ui/react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -26,10 +32,13 @@ export default function Products() {
   const { search } = useLocation();
   let params = new URLSearchParams(search);
   let entries = params.entries();
+  let { product_type, category, brand, min, max, sort } =
+    Object.fromEntries(entries);
 
   useEffect(() => {
-    dispatch(get_products(Object.fromEntries(entries)));
-  }, [search]);
+    dispatch(get_products({ product_type, category, brand, min, max, sort }));
+    document.documentElement.scrollTop = 0;
+  }, [dispatch, product_type, category, brand, min, max, sort]);
 
   return (
     <>
@@ -48,24 +57,22 @@ export default function Products() {
         }}
       >
         <Show above="lg">
-          <GridItem
-            rowSpan={50000}
-            colSpan={1}
-            {...BorderStyle}
-            border={"1px solid #d6d6d6"}
-          >
+          <GridItem rowSpan={50000} colSpan={1} {...BorderStyle}>
             <FilterComponent />
           </GridItem>
         </Show>
-        {PRODUCTS.length &&
+        {!PRODUCTS.length ? (
+          <Center>
+            <Heading>No data found ({PRODUCTS.length})</Heading>
+          </Center>
+        ) : (
           PRODUCTS?.map((product) => (
             <Stack
-              p="20px"
-              border={"1px solid #d6d6d6"}
+              key={product._id}
+              {...BorderStyle}
               justify="space-between"
               textTransform={"uppercase"}
               _hover={{ border: "1px solid black" }}
-              m="10px"
               h="400px"
               as={Link}
               to={`/products/${product._id}`}
@@ -107,7 +114,8 @@ export default function Products() {
                 </HStack>
               </Stack>
             </Stack>
-          ))}
+          ))
+        )}
       </Grid>
     </>
   );

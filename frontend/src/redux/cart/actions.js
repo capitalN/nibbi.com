@@ -11,6 +11,7 @@ import {
   GET_CART_SUCCESS,
   UPDATE_CART,
 } from "./actionTypes";
+import { Toast, useToast } from "@chakra-ui/react";
 
 const token = localStorage.getItem("token");
 
@@ -22,13 +23,14 @@ export const get_cart = () => async (dispatch) => {
         Authorization: token,
       },
     });
+
     dispatch({ type: GET_CART_SUCCESS, payload: res.data });
   } catch (error) {
     dispatch({ type: GET_CART_ERROR });
   }
 };
 
-export const add_to_cart = (product) => async (dispatch) => {
+export const add_to_cart = (data) => async (dispatch) => {
   dispatch({ type: ADD_CART_LOADING });
   try {
     let res = await axios({
@@ -38,10 +40,13 @@ export const add_to_cart = (product) => async (dispatch) => {
       headers: {
         Authorization: token,
       },
-      data: product,
+      data,
     });
+    alert("SUCCSS, product added to cart");
     dispatch({ type: ADD_CART_SUCCESS, payload: res.data });
   } catch (err) {
+    alert("product is in cart already");
+    console.log(err);
     dispatch({ type: ADD_CART_ERROR, payload: err });
   }
 };

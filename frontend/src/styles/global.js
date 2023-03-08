@@ -10,6 +10,6 @@ export const BoxStyle = { m: "20px", p: "20px" };
 
 export const BorderStyle = {
   p: "20px",
-  border: "1px solid #d6d6d6",
+  // border: "1px solid #d6d6d6",
   m: "10px",
 };

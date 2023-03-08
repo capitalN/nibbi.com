@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 CartRouter.get("/", async (req, res) => {
   const token = req.headers.authorization;
-  var { userId } = jwt.verify(token, "dermstore");
+  const { userId } = req.body;
   try {
     const cart = await CartModel.find({ userId });
     res.send(cart);
@@ -13,14 +13,12 @@ CartRouter.get("/", async (req, res) => {
   }
 });
 
-CartRouter.post("/add", (req, res) => {
+CartRouter.post("/add",async (req, res) => {
   const body = req.body;
-  const token = req.headers.authorization;
-  var { userId } = jwt.verify(token, "dermstore");
+  const { userId } = req.body;
   try {
-    const cart = new CartModel({ ...body, userId });
-    cart.save();
-    res.send(body);
+    const item = await CartModel.create({ ...body, userId })
+    res.send(item)
   } catch (error) {
     res.status(500).send({ msg: "error in adding cart item", error });
   }
@@ -33,7 +31,6 @@ CartRouter.patch("/update/:id", async (req, res) => {
     let item = await CartModel.findByIdAndUpdate({ _id: itemId }, payload, {
       new: true,
     });
-    console.log(item);
     res.send(item);
   } catch (error) {
     res.status(500).send({ msg: "error in updating cart item", error });

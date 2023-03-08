@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Container,
   Divider,
   Flex,
@@ -63,12 +64,7 @@ export default function Checkout() {
   };
 
   return (
-    <>
-      <Box {...BorderStyle}>
-        <Heading fontFamily={"inherit"} size="md">
-          CHECKOUT
-        </Heading>
-      </Box>
+    <Center minH="100vh" w="100%">
       <Flex
         flexWrap={"wrap"}
         justify={"space-evenly"}
@@ -163,6 +159,6 @@ export default function Checkout() {
           )}
         </Stack>
       </Flex>
-    </>
+    </Center>
   );
 }
