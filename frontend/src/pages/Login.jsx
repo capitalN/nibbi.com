@@ -31,22 +31,31 @@ const initialData = {
 
 export default function Login() {
   const dispatch = useDispatch();
-  const { isAuth } = useSelector((store) => store.authManager);
+  const { isAuth, token, payload } = useSelector((store) => store.authManager);
   const [inputData, setInputData] = useState(initialData);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputData({ ...inputData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(user_login(inputData));
-    setInputData(initialData);
+    await dispatch(user_login(inputData));
+    window.location.reload();
   };
 
+  useEffect(() => {
+    if (token && isAuth) {
+      alert("login successfull");
+      navigate("/");
+    }
+  }, []);
+
   return (
-    <Center h="91vh">
+    <Center h="100vh">
       <Stack w="300px">
         <Heading>LOGIN</Heading>
         <br />

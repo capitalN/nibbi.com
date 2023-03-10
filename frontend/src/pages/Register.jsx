@@ -11,10 +11,12 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import {Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ButtonStyle } from "../styles/global";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { user_register } from "../redux/auth/actions";
+import { useEffect } from "react";
+import useToastCompo from "../utils/useToast";
 
 const initialData = {
   email: "",
@@ -23,6 +25,8 @@ const initialData = {
 
 export default function Register() {
   const dispatch = useDispatch();
+  const { Toast } = useToastCompo();
+  const { isAuth, token, payload } = useSelector((store) => store.authManager);
 
   const [inputData, setInputData] = useState(initialData);
   const handleChange = (e) => {
@@ -30,14 +34,16 @@ export default function Register() {
     setInputData({ ...inputData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(user_register(inputData));
+    await dispatch(user_register(inputData));
     setInputData(initialData);
   };
 
+
+
   return (
-    <Center h="80vh">
+    <Center h="100vh">
       <Stack w="300px">
         <Heading>REGISTER</Heading>
         <br />

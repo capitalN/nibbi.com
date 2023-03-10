@@ -20,30 +20,61 @@ import {
   Input,
   HStack,
   Divider,
+  CloseButton,
+  Radio,
+  RadioGroup,
 } from "@chakra-ui/react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  createSearchParams,
+  Link,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { BorderStyle } from "../styles/global";
+import { useState } from "react";
+import { useEffect } from "react";
+import { get_products } from "../redux/products/actions";
+import { useSearchParams } from "react-router-dom";
+import { AiOutlineFilter } from "react-icons/ai";
 
 export default function FilterComponent() {
   let navigate = useNavigate();
-  const handleFilter = (main, sub) => {
+  const dispatch = useDispatch();
+  let [searchParams, setSearchParams] = useSearchParams();
+  // const { search } = useLocation();
+  let params = new URLSearchParams(searchParams);
+  let entries = params.entries();
+  let obj = Object.fromEntries(entries);
+
+  const handleFilter = async (main, sub) => {
     if (main === "price") {
-      navigate(`?min=${sub[0]}&max${sub[2]}`);
+      // dispatch(get_products({ ...params, min: sub[0], max: sub[2] }));
+      setSearchParams({ ...obj, min: sub[0], max: sub[2] });
     } else if (main === "brand") {
-      navigate(`?${main}=${sub}`);
+      // dispatch(get_products({ ...params, brand: sub }));
+      setSearchParams({ ...obj, brand: sub });
     } else if (main === "sort") {
-      navigate(`?${main}=${sub[2]}`);
+      // dispatch(get_products({ ...params, sort: sub }));
+      setSearchParams({ ...obj, sort: sub[2] });
+    } else if (main === "type") {
+      // dispatch(get_products({ ...params, product_type: sub }));
+      setSearchParams({ ...obj, product_type: sub });
     }
   };
 
   return (
-    <Box position={"sticky"} top="65px">
-      <Stack p="10px" textAlign="left">
-        <Stack p="15px" position={"relative"}>
+    <Box position={"sticky"} top="85px" >
+      <Stack textAlign="left">
+        <Stack position={"relative"}>
           <HStack w="100%" justify={"space-between"}>
-            <Heading size={"md"}>FILTERS</Heading>
-            <Link to={""}>RESET</Link>
+            <Heading size={"md"} fontFamily="inherit">
+              FILTERS
+            </Heading>
+            {params?.sort && <Box border={"1px solid"}>{params.sort}</Box>}
+            <button onClick={() => setSearchParams({})}>RESET</button>
           </HStack>
         </Stack>
         <Accordion defaultIndex={[0]} allowMultiple>
@@ -61,7 +92,6 @@ export default function FilterComponent() {
                     <button onClick={() => handleFilter(main.title, el)}>
                       {el}
                     </button>
-                    {/* <Link to={`?${main.title}=${el}`}> {el}</Link> */}
                     <br />
                   </div>
                 ))}
@@ -83,10 +113,12 @@ export function FilterDrower() {
       <button ref={btnRef} colorScheme="teal" onClick={onOpen}>
         <Text
           fontWeight={"bold"}
-          color="white"
+          // color="white"
           w="80px"
-          bgColor={"black"}
+          bgColor={"white"}
+          border="1px solid"
           p="5px"
+          m="10px"
         >
           FILTER
         </Text>
@@ -118,10 +150,6 @@ export function FilterDrower() {
 
 export const filters = [
   {
-    title: "category",
-    subtitles: ["blush", "bronzer", "eyeliner", "lipstick", "nail_polish"],
-  },
-  {
     title: "sort",
     subtitles: [
       ["A to Z", " ", "brand"],
@@ -148,16 +176,6 @@ export const filters = [
       "marcelle",
       "marienatie",
       "maybelline",
-      "milani",
-      "mineral fusion",
-      "nyx",
-      "pacifica",
-      "physicians formula",
-      "pure anada",
-      "revlon",
-      "smashbox",
-      "suncoat",
-      "wet n wild",
     ],
   },
   {

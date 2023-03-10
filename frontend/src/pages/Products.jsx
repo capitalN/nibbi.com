@@ -9,13 +9,22 @@ import {
   Skeleton,
   Image,
   Badge,
+  HStack,
+  Heading,
+  Center,
 } from "@chakra-ui/react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import FilterComponent, { FilterDrower } from "../components/FilterComponent";
 import { get_products } from "../redux/products/actions";
+import { BorderStyle } from "../styles/global";
 
 export default function Products() {
   const { PRODUCTS, loading } = useSelector((store) => store.productsManager);
@@ -23,10 +32,13 @@ export default function Products() {
   const { search } = useLocation();
   let params = new URLSearchParams(search);
   let entries = params.entries();
+  let { product_type, category, brand, min, max, sort } =
+    Object.fromEntries(entries);
 
   useEffect(() => {
-    dispatch(get_products(Object.fromEntries(entries)));
-  }, [search]);
+    dispatch(get_products({ product_type, category, brand, min, max, sort }));
+    document.documentElement.scrollTop = 0;
+  }, [dispatch, product_type, category, brand, min, max, sort]);
 
   return (
     <>
@@ -37,37 +49,38 @@ export default function Products() {
       </Show>
       <Grid
         gridTemplateColumns={{
-          base: "repeat(2,1fr)",
+          base: "repeat(1,1fr)",
           sm: "repeat(2,1fr)",
-          md: "repeat(3,1fr)",
-          lg: "repeat(4,1fr)",
-          xl: "repeat(5,1fr)",
+          md: "repeat(2,1fr)",
+          lg: "repeat(3,1fr)",
+          xl: "repeat(4,1fr)",
         }}
       >
         <Show above="lg">
-          <GridItem rowSpan={50000} colSpan={1}>
+          <GridItem rowSpan={50000} colSpan={1} {...BorderStyle}>
             <FilterComponent />
           </GridItem>
         </Show>
-        {PRODUCTS.length &&
+        {!PRODUCTS.length ? (
+          <Center>
+            <Heading>No data found ({PRODUCTS.length})</Heading>
+          </Center>
+        ) : (
           PRODUCTS?.map((product) => (
             <Stack
+              key={product._id}
+              {...BorderStyle}
+              justify="space-between"
+              textTransform={"uppercase"}
+              _hover={{ border: "1px solid black" }}
+              h="400px"
               as={Link}
               to={`/products/${product._id}`}
-              key={product._id}
-              justify={"space-between"}
-              align="center"
-              border={"1px solid #D6D6D6"}
-              p="10px 5px"
-              position={"relative"}
-              textAlign="center"
             >
               <Skeleton
                 isLoaded={!loading}
                 display="inline-block"
                 overflowY={"hidden"}
-                h="250px"
-                w="100%"
               >
                 <Image
                   src={product.api_featured_image}
@@ -75,28 +88,34 @@ export default function Products() {
                   w="100%"
                 />
               </Skeleton>
-              <Divider />
-              <Box
-                overflow={"hidden !important"}
-                display={"inline-block"}
-                whiteSpace="nowrap"
-                textOverflow={"ellipsis"}
-                w={{ base: "170px" }}
-              >
+
+              <Stack>
                 <Text
-                  fontSize={"lg"}
                   overflow={"hidden !important"}
+                  display={"inline-block"}
+                  whiteSpace="nowrap"
                   textOverflow={"ellipsis"}
+                  w={{ base: "250px" }}
+                  fontWeight="bold"
                 >
-                  {product.brand ? product.brand.toUpperCase() : "BRAND"}
-                </Text>
-                <Text overflow={"hidden !important"} textOverflow={"ellipsis"}>
                   {product.name}
                 </Text>
-                <Badge>$ {product.price}</Badge>
-              </Box>
+                <HStack justify={"space-between"}>
+                  <Text
+                    overflow={"hidden !important"}
+                    display={"inline-block"}
+                    whiteSpace="nowrap"
+                    textOverflow={"ellipsis"}
+                    w={{ base: "200px" }}
+                  >
+                    {product.brand || "brand"}
+                  </Text>
+                  <Text>$ {product.price}</Text>
+                </HStack>
+              </Stack>
             </Stack>
-          ))}
+          ))
+        )}
       </Grid>
     </>
   );

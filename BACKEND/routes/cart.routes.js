@@ -4,43 +4,36 @@ const jwt = require("jsonwebtoken");
 
 CartRouter.get("/", async (req, res) => {
   const token = req.headers.authorization;
-  var { userId } = jwt.verify(token, "dermstore");
+  const { userId } = req.body;
   try {
     const cart = await CartModel.find({ userId });
     res.send(cart);
   } catch (error) {
-    res.send({ msg: "error in getting cart items", error });
+    res.status(500).send({ msg: "error in getting cart items", error });
   }
 });
 
-CartRouter.post("/add", (req, res) => {
+CartRouter.post("/add",async (req, res) => {
   const body = req.body;
-  const token = req.headers.authorization;
-  var { userId } = jwt.verify(token, "dermstore");
+  const { userId } = req.body;
   try {
-    const cart = new CartModel({ ...body, userId });
-    cart.save();
-    res.send(body);
+    const item = await CartModel.create({ ...body, userId })
+    res.send(item)
   } catch (error) {
-    res.send({ msg: "error in adding cart item", error });
+    res.status(500).send({ msg: "error in adding cart item", error });
   }
 });
 
 CartRouter.patch("/update/:id", async (req, res) => {
   const payload = req.body;
   const itemId = req.params.id;
-  const cartItem = await CartModel.findById({ _id: itemId });
-  const userInCart = cartItem.userId;
-  const userMakingReq = req.body.userId;
   try {
-    if (userInCart == userMakingReq) {
-      await CartModel.findByIdAndUpdate({ _id: id }, payload);
-      res.send({ msg: "cart item updated" });
-    } else {
-      res.send({ msg: "you'r not allowed to update" });
-    }
+    let item = await CartModel.findByIdAndUpdate({ _id: itemId }, payload, {
+      new: true,
+    });
+    res.send(item);
   } catch (error) {
-    res.send({ msg: "error in updating cart item", error });
+    res.status(500).send({ msg: "error in updating cart item", error });
   }
 });
 
@@ -53,10 +46,10 @@ CartRouter.delete("/delete/:id", async (req, res) => {
     if (userInCart == userMakingReq) {
       res.send({ msg: "deleted cart item" });
     } else {
-      res.send({ msg: "you'r not authorized to delete this item" });
+      res.status(500).send({ msg: "you'r not authorized to delete this item" });
     }
   } catch (error) {
-    res.send({ msg: "error in deleting cart item", error });
+    res.status(500).send({ msg: "error in deleting cart item", error });
   }
 });
 

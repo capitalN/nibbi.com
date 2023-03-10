@@ -15,12 +15,11 @@ export const get_products = (params) => async (dispatch) => {
       method: "GET",
       baseURL,
       url: `products`,
-      params: { ...params, limit: 12 },
+      params,
     });
     dispatch({
       type: GET_PRODUCTS_SUCCESS,
       payload: res.data,
-      params,
     });
   } catch (error) {
     dispatch({

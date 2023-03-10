@@ -32,7 +32,6 @@ export default function SearchDrower() {
   const dispatch = useDispatch();
 
   const handleSearch = (e) => {
-    console.log(e.target.value);
     dispatch(get_searched_products({ q: e.target.value, limit: 8 }));
   };
 
@@ -46,7 +45,7 @@ export default function SearchDrower() {
         placement="top"
         onClose={onClose}
         finalFocusRef={btnRef}
-        size="sm"
+        size="xs"
       >
         <DrawerOverlay />
 
@@ -64,9 +63,9 @@ export default function SearchDrower() {
                   <br />
                   <HStack
                     as={Link}
-                    //   to={`/products/${el._id}`}
-                    to="#"
+                    to={`/products/${el._id}`}
                     justify="space-between"
+                    onClick={onClose}
                   >
                     <Text>{el.name}</Text>
                     <Text>{el.brand}</Text>

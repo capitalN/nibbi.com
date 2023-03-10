@@ -11,6 +11,7 @@ import {
   GET_CART_SUCCESS,
   UPDATE_CART,
 } from "./actionTypes";
+import { Toast, useToast } from "@chakra-ui/react";
 
 const token = localStorage.getItem("token");
 
@@ -22,14 +23,14 @@ export const get_cart = () => async (dispatch) => {
         Authorization: token,
       },
     });
+
     dispatch({ type: GET_CART_SUCCESS, payload: res.data });
   } catch (error) {
-    console.log(error);
     dispatch({ type: GET_CART_ERROR });
   }
 };
 
-export const add_to_cart = (product) => async (dispatch) => {
+export const add_to_cart = (data) => async (dispatch) => {
   dispatch({ type: ADD_CART_LOADING });
   try {
     let res = await axios({
@@ -39,21 +40,33 @@ export const add_to_cart = (product) => async (dispatch) => {
       headers: {
         Authorization: token,
       },
-      data: product,
+      data,
     });
-    await dispatch({ type: ADD_CART_SUCCESS, payload: res.data });
+    alert("SUCCSS, product added to cart");
+    dispatch({ type: ADD_CART_SUCCESS, payload: res.data });
   } catch (err) {
-    console.log(err.response.data);
+    alert("product is in cart already");
+    console.log(err);
     dispatch({ type: ADD_CART_ERROR, payload: err });
   }
 };
 
-export const update_cart =
-  ({ id, a }) =>
-  async (dispatch) => {
-    let res = await axios.patch(`${baseURL}/cart/${id}`, { count: a });
+export const update_cart = (id, data) => async (dispatch) => {
+  try {
+    let res = await axios({
+      method: "patch",
+      baseURL,
+      url: `cart/update/${id}`,
+      headers: {
+        Authorization: token,
+      },
+      data,
+    });
     dispatch({ type: UPDATE_CART, payload: res.data });
-  };
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const delete_from_cart = (id) => async (dispatch) => {
   let res = await axios.delete(`${baseURL}/cart/delete/${id}`, {

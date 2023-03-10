@@ -42,6 +42,7 @@ export const CartReducer = (state = initialState, { type, payload }) => {
         CART: payload,
         loading: false,
         error: true,
+        payload,
       };
     }
 
@@ -72,7 +73,7 @@ export const CartReducer = (state = initialState, { type, payload }) => {
 
     case UPDATE_CART: {
       let updated = state.CART.map((el) => {
-        if (el.id === payload.id) {
+        if (el._id === payload._id) {
           return payload;
         }
         return el;
@@ -87,13 +88,6 @@ export const CartReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         CART: filtered,
-      };
-    }
-    case DELETE_FROM_CART_LOADING: {
-      let filtered = state.CART.filter((el) => el._id !== payload);
-      return {
-        ...state,
-        loading: true,
       };
     }
     case EMPTY_CART: {
