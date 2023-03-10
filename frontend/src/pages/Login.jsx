@@ -55,7 +55,7 @@ export default function Login() {
   }, []);
 
   return (
-    <Center h="80vh">
+    <Center h="100vh">
       <Stack w="300px">
         <Heading>LOGIN</Heading>
         <br />

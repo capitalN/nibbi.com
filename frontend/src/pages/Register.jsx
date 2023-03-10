@@ -40,8 +40,10 @@ export default function Register() {
     setInputData(initialData);
   };
 
+
+
   return (
-    <Center h="80vh">
+    <Center h="100vh">
       <Stack w="300px">
         <Heading>REGISTER</Heading>
         <br />

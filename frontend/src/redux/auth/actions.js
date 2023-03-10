@@ -3,6 +3,16 @@ import axios from "axios";
 import { USER_LOGIN, USER_REGISTER } from "./actionTypes";
 
 export const user_register = (data) => async (dispatch) => {
+  if(!data.email.includes("@" && ".com")){
+    alert("enter valid email (user@example.com)");
+    return;
+  }
+  if (data.password.length < 8 || !data.password.match(/[!@#$%^&*+-]/)) {
+    alert(
+      "password should include 8 charecters with atleast 1 special charecter(!@#$%^&*+-)"
+    );
+    return;
+  }
   try {
     let res = await axios({
       method: "POST",

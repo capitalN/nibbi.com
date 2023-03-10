@@ -125,7 +125,7 @@ export default function HomeCarousel() {
                 w={"full"}
                 maxW={"lg"}
                 position="absolute"
-                top="50%"
+                top="45%"
                 transform="translate(0, -50%)"
                 p="20px"
                 bgColor={"white"}

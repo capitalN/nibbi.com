@@ -1,11 +1,11 @@
 import React from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 
 export default function HomeVideo() {
   return (
-    <Box w="100%" h="100vh">
+    <Box w="100%" h="100vh" position={"relative"}>
       <video
-        autoplay={true}
+        autoplay
         muted
         loop
         style={{
@@ -16,6 +16,18 @@ export default function HomeVideo() {
       >
         <source src="nibbi.mp4" type="video/mp4" />
       </video>
+      <Box
+        position={"absolute"}
+        color="white"
+        top="50%"
+        textAlign={"center"}
+        w="100%"
+      >
+        <Heading fontSize={"10rem"} fontFamily={"cursive"}>
+          nibbi
+        </Heading>
+        <Heading fontFamily={"inherit"}>www.nibbi.com</Heading>
+      </Box>
     </Box>
   );
 }

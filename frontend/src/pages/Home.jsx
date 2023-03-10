@@ -17,9 +17,9 @@ import HomeVideo from "../components/HomeVideo";
 export default function Home() {
   return (
     <Box>
-      <HeroOne />
+      <HomeVideo />
       <HomeCarousel />
-      <HomeVideo/>
+      <HeroOne />
     </Box>
   );
 }
