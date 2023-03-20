@@ -1,5 +1,9 @@
 # nibbi.com
-An online store for women’s beauty products would typically offer a variety of cosmetics and skincare items for purchase over the internet. These could include makeup, hair care products, fragrances and more.
+- An online store for women’s beauty products would typically offer a variety of cosmetics and skincare items for purchase over the internet. These could include makeup, hair care products, fragrances and more.
+- this is an individual project (completed in 7-days).
+- i used HTML, CSS, JavaScript, React, ReduxStore, RouterDom(for routing) & ChakraUI(external css) for Frontend & Node.js, Express.js & MongoDB for Backend.
+- for deployment i used Vercel (frontend) & Cyclic (backend)
+- all the pages are responsive to vareous screen size.
 
 # Routes (frontend & backend)
 ![Screenshot (408)](https://user-images.githubusercontent.com/107465553/226318914-85c94a36-cb64-4977-b33c-705dd042fa80.png)
