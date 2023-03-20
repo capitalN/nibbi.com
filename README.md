@@ -1,3 +1,3 @@
 # nibbi.com
-- nibbi.com is a online store for beauty & personal care products for womens.
-- this website is mainly inspired by DERMSTORE.COM, MOODSENCE.COM & my own imagination.
+An online store for women’s beauty products would typically offer a variety of cosmetics and skincare items for purchase over the internet. These could include makeup, hair care products, fragrances and more.
+
