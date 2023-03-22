@@ -61,7 +61,7 @@ export default function Navbar() {
 
         <Show above="lg">
           <Box w="120px">
-            <Heading as={Link} to="" fontFamily="cursive">
+            <Heading as={Link} to="/" fontFamily="inherit">
               nibbi
             </Heading>
           </Box>
@@ -104,7 +104,7 @@ export default function Navbar() {
   );
 }
 
-const DropDown = ({ main }) => {
+const DropDown = ({ main, onClose }) => {
   // const dispatch = useDispatch();
 
   // const handleClick = (main, sub) => {
@@ -124,24 +124,12 @@ const DropDown = ({ main }) => {
         <PopoverContent w="auto">
           <PopoverArrow />
           <Stack justify={"space-between"} p="20px">
-            {/* <Stack w="140px">
-              {main.tag.map((tag) => (
-                <Text
-                  as={Link}
-                  to={`/products?product_type=${main.type}&products_tag=${tag}`}
-                  key={tag}
-                  _hover={{ fontWeight: "bold" }}
-                >
-                  {tag}
-                </Text>
-              ))}
-            </Stack> */}
-
             <Stack w="140px">
               <Text
                 as={Link}
                 to={`/products?product_type=${main.type}`}
                 _hover={{ fontWeight: "bold" }}
+                onClick={onClose}
               >
                 ALL
               </Text>
@@ -153,7 +141,7 @@ const DropDown = ({ main }) => {
                     key={category}
                     _hover={{ fontWeight: "bold" }}
                     target="_self"
-                    // onClick={() => (document.documentElement.scrollTop = 0)}
+                    onClick={onClose}
                   >
                     {category}
                   </Text>
@@ -186,7 +174,7 @@ export function NavDrawer() {
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader>
-              <Heading as={Link} to="" fontFamily="cursive">
+              <Heading as={Link} to="" fontFamily="inherit">
                 nibbi
               </Heading>
             </DrawerHeader>
@@ -195,7 +183,7 @@ export function NavDrawer() {
               <Stack justify={"space-evenly"} gap="20px">
                 {LINKS.map((main) => (
                   <div key={main.type}>
-                    <DropDown main={main} />
+                    <DropDown main={main} onClose={onClose} />
                   </div>
                 ))}
               </Stack>

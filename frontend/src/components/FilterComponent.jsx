@@ -40,7 +40,7 @@ import { get_products } from "../redux/products/actions";
 import { useSearchParams } from "react-router-dom";
 import { AiOutlineFilter } from "react-icons/ai";
 
-export default function FilterComponent() {
+export default function FilterComponent({onClose}) {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   let [searchParams, setSearchParams] = useSearchParams();
@@ -134,7 +134,7 @@ export function FilterDrower() {
           <DrawerHeader></DrawerHeader>
 
           <DrawerBody>
-            <FilterComponent />
+            <FilterComponent onClose={onClose} />
           </DrawerBody>
 
           <DrawerFooter>

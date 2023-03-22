@@ -13,7 +13,7 @@ import NewsLetter from "./NewsLetter";
 
 export default function Footer() {
   return (
-    <Center w="100%" minH="100vh" zIndex={2000} as={"footer"} bgColor="white">
+    <Center w="100%" minH="100vh" as={"footer"} bgColor="white">
       <Grid
         gridTemplateColumns={{
           base: "repeat(1,1fr)",
@@ -23,9 +23,12 @@ export default function Footer() {
           xl: "repeat(4,1fr)",
         }}
         gap="30px"
+        p={"40px"}
       >
         <Stack>
-          <Heading fontFamily={"cursive"} size="2xl">nibbi</Heading>
+          <Heading fontFamily="inherit" size="2xl">
+            nibbi
+          </Heading>
           <Text>www.nibbi.com</Text>
         </Stack>
         {LINKS.map((el) => (
