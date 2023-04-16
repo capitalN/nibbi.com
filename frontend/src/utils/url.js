@@ -1,1 +1,1 @@
-export const baseURL = process.env.baseURL || "http://localhost:3001";
+export const baseURL = "https://good-blue-bandicoot-boot.cyclic.app"

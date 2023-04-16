@@ -1,7 +1,5 @@
 const { default: mongoose } = require("mongoose");
 
-const connect = mongoose.connect(
-  "mongodb+srv://nikhil:nikhil@cluster0.8ffrcyb.mongodb.net/dermstore?retryWrites=true&w=majority"
-);
+const connect = mongoose.connect(process.env.mongoURL);
 
 module.exports = { connect };

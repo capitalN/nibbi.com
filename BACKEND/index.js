@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 
 // local import
 const { authenticate } = require("./middlewares/authenticate");
@@ -9,8 +10,8 @@ const { UserRouter } = require("./routes/users.routes");
 const { CartRouter } = require("./routes/cart.routes");
 
 // setup
+
 const app = express();
-require("dotenv").config();
 app.use(express.json());
 app.use(cors());
 

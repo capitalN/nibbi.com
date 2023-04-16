@@ -45,10 +45,12 @@ export default function Checkout() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // localStorage.setItem("checkout", JSON.stringify(inputData));
+    setTimeout(() => {
+      Toast("order confirmed");
+      setSummery({ ...inputData, show: true });
+      setInputData(initialData);
+    }, 5000);
     Toast("form submitted");
-    setSummery({ ...inputData, show: true });
-    setInputData(initialData);
   };
 
   const handlePin = async () => {

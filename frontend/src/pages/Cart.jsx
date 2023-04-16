@@ -170,7 +170,7 @@ export default function Cart() {
       )}
     </Skeleton>
   ) : (
-    <Center h="100vh">
+    <Center minH="100vh">
       <Box>
         <Heading fontFamily={"inherit"}>Please login first</Heading>
         <br />

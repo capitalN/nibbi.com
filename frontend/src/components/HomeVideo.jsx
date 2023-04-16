@@ -6,16 +6,16 @@ export default function HomeVideo() {
     <Box w="100%" h="100vh" position={"relative"}>
       <video
         autoplay
-        muted
+        muted={true}
         loop
+        src="nibbi.mp4"
+        type="video/mp4"
         style={{
           objectFit: "cover",
           width: "100%",
           height: "100vh",
         }}
-      >
-        <source src="nibbi.mp4" type="video/mp4" />
-      </video>
+      />
       <Box
         position={"absolute"}
         color="white"
@@ -23,7 +23,7 @@ export default function HomeVideo() {
         textAlign={"center"}
         w="100%"
       >
-        <Heading fontSize={"10rem"} fontFamily={"cursive"}>
+        <Heading fontSize={"10rem"} fontFamily="inherit">
           nibbi
         </Heading>
         <Heading fontFamily={"inherit"}>www.nibbi.com</Heading>
